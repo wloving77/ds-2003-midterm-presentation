@@ -141,3 +141,7 @@ ggplotly(plot)
 ```
 
 
+# Part 1 Closing Remarks: 
+
+> - This has been a look into the data science job market examining salary as it relates to company size, the companies remote ratios, and the actual experience levels required for the positions. We will now be moving into more general Software Engineering Visuals for Part 2.
+

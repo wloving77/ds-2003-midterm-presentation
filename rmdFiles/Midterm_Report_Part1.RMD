@@ -1,0 +1,143 @@
+---
+title: "Midterm Report Part-1"
+author: "wlf9zy, jes9hd"
+date: "2023-10-22"
+output: html_document
+---
+## **Contributors:**
+> William Loving (wfl9zy)
+> James Sweat (jes9hd)
+
+## **Goals:**
+> 1. Explore and visualize the broader Computer Science / Data Analysis industry fields. 
+> 2. Discover interesting correlations between attributes of available jobs using multiple different Datasets.
+> 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
+  
+# **Part 1: Data Science Positions:**
+> Here we will explore Data Scientist Jobs in an around the United States
+  
+# Load Data:
+
+
+```{r, echo=FALSE, message=FALSE}
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+
+```
+
+```{r}
+data <- read_csv("../data/data-science-jobs/ds_salaries.csv")
+
+head(data)
+```
+
+# Explore Data and Make Necessary Transformations:
+
+```{r, echo=FALSE}
+str(data)
+```
+
+```{r, echo=FALSE}
+summary(data)
+```
+
+
+## Mutate Categorical Variables to be More Descriptive: 
+
+```{r, echo=TRUE}
+data_transformed <- data%>%
+  mutate(experience_level = ifelse(experience_level=="EN", "Entry-Level", 
+                                   ifelse(experience_level=="MI", "Manager-Level", 
+                                          ifelse(experience_level=="SE", "Senior-Level",
+                                                 ifelse(experience_level=="EX", "Executive-Level", experience_level)))))
+
+data_transformed <- data_transformed%>%
+  mutate(employment_type = ifelse(employment_type=="CT", "Contract-Work", 
+                                   ifelse(employment_type=="FT", "Full-Time", 
+                                          ifelse(employment_type=="PT", "Part-Time",
+                                                 ifelse(employment_type=="FL", "FreeLance", employment_type)))))
+
+data_transformed <- data_transformed%>%
+  mutate(company_size = ifelse(company_size=="L", "Large", 
+                                   ifelse(company_size=="M", "Medium", 
+                                          ifelse(company_size=="S", "Small", company_size))))
+
+data_transformed <- data_transformed%>%
+  mutate(remote_ratio = ifelse(remote_ratio==0, "In-Person", 
+                                   ifelse(remote_ratio==50, "Hybrid", 
+                                          ifelse(remote_ratio==100, "Remote", remote_ratio))))
+
+
+head(data_transformed)
+
+```
+
+# **Create Plots to Tell Stories:**
+
+## Plot 1:
+> - With this plot we can clearly see that as your experience level rises, you can expect to see a corresponding increase in salary.
+> - It is also worth noting that different types of work see different effects, for example, contract work is much more volatile than Full Time salaries.
+
+```{r, echo=TRUE}
+plot <- ggplot(data_transformed, aes(x=experience_level, y=salary_in_usd, fill=employment_type)) +
+  geom_bar(stat='identity', position='dodge') + 
+  labs(
+    x="Experience Level",
+    y="Salary in $USD",
+    fill="Employment Type",
+    title="The effects of Experience Level on Salary"
+  ) + 
+  scale_x_discrete(limits = c("Entry-Level", "Senior-Level", "Manager-Level","Executive-Level")) +
+  theme_minimal()
+
+ggplotly(plot)
+```
+
+## Plot 2:
+> - Note that In-Person only paid the highest for Medium Sized Companies, Remote actually had the highest payout for Large 
+> - Small companies pay grows step-wise with respect to the remote ratio (Hybrid->In-Person->Remote)
+
+```{r}
+plot <- ggplot(data_transformed, aes(x=company_size, y=salary_in_usd, fill=remote_ratio)) +
+          geom_bar(stat='identity', position='dodge') +
+          labs(
+            x="Company size",
+            y="Salary in $USD",
+            fill="Remote Ratio",
+            title="The effects of Company Size and Remote Ratio on Salary"
+          ) + 
+          scale_x_discrete(limits = c("Small", "Medium", "Large")) + 
+          theme_minimal()
+
+ggplotly(plot)
+
+
+```
+
+## Plot 3:
+> - A lot of information, but the most interesting is that the US has the highest paying jobs by far with Small companies in Japan as a close second.
+
+```{r}
+
+plot <- ggplot(data_transformed, aes(x=company_location, y=salary_in_usd, fill=company_size)) +
+          geom_bar(stat='identity', position='dodge') +
+          labs(
+            x="Company Location",
+            y="Salary in $USD",
+            fill="Company Size",
+            title="The effects of Company Location and Size on Salary"
+          ) + 
+          theme_minimal() +
+          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+
+  
+  
+ggplotly(plot)
+```
+
+

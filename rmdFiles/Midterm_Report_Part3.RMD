@@ -10,7 +10,11 @@ output: html_document
 > James Sweat (jes9hd)
 
 ## **Goals:**
-> - Our goal here in part 3 is to explore jobs and job satisfaction on a more granular level, we want to see if people enjoy their jobs or if they are "forced" to among many other interesting correlations. 
+> - Our goal here in part 3 is to explore jobs and job satisfaction on a more granular level.
+> - Find out whether or not older individuals favor non-travel working styles or overtime positions.
+> - Find out if job role and distance from home have an impact on general job satisfaction.
+> - Find out if job satisfaction declines as the number of years since promotion rises.
+> - Find out if the marital status of individuals when working has a general trend, are more people married? Divorced? Single?
 
 # **Part 3: Job Satisfaction Outside of CS/DS:**
 > - This data more-so concerns people and how they felt about their jobs rather than data about the global job itself.
@@ -30,7 +34,6 @@ data <- read_csv("../data/job-satisfaction-data/hr_data.csv.csv")
 ```
 
 ```{r}
-
 head(data)
 ```
 
@@ -45,7 +48,7 @@ data$JobSatisfaction <- as.factor(data$JobSatisfaction)
 
 
 
-# **Create Visuals:**
+# **Visuals:**
 
 # Plot 1: 
 

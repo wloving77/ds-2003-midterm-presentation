@@ -10,13 +10,13 @@ output: html_document
 > James Sweat (jes9hd)
 
 ## **Goals:**
-> 1. Explore and visualize the broader Software Engineering field
-> 2. Create story-telling visualizations that provide sneak-peaks into the psyche of many comapnies as well as working individuals.
-> 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
+> - Find out if higher salary jobs tend to be rated more highly than lower salary. 
+> - Find out where jobs are offered and see if some jobs are location specific.
+> - 
   
 # **Part 2: Software Engineering Positions in India:**
-> - Here our goal will be to create as many interesting plots as possible, this dataset is more feature rich so we should be able to find some interesting things.
-> - Note: This dataset was taken from job data in India, we hope the trends seen there will to some degree translate.
+> - The data is vast so visualizations must be poignant and intentional with the correlations we hope to explore. 
+> - We'll begin by loading the data and making small transformations for ease of use.
 
 ```{r, message=FALSE}
 library(readr)
@@ -25,37 +25,40 @@ library(ggplot2)
 library(plotly)
 ```
 
-# Load Data: 
+# **Load Data:** 
+
+```{r, message=FALSE}
+data <- read_csv("../data/india-data/Salary_Dataset_with_Extra_Features.csv")
+```
 
 ```{r}
-data <- read_csv("../data/india-data/Salary_Dataset_with_Extra_Features.csv")
-
 head(data)
 
 ```
 
-# Make Some Transformations for Ease of Understanding:
+# **Make Some Transformations for Ease of Understanding:**
 
-```{r}
+```{r, message=FALSE}
 
 #Remove the one outlier
 threshold <- 9000000
 
-filtered_data <- data%>%
+data_filtered <- data%>%
   filter(Salary < threshold)
 
-filtered_data$Location <- as.factor(filtered_data$Location)
-
-sampled_data  <- filtered_data[sample(nrow(data), 1000), ]
-
+data_filtered$Location <- as.factor(data_filtered$Location)
+data_filtered$`Employment Status` <- as.factor(data_filtered$`Employment Status`)
 
 ```
 
-# Create Visualizations: 
 
-```{r}
+# **Create Visuals:** 
 
-plot <- ggplot(filtered_data, aes(x=Rating, y=Salary)) +
+# Plot 1:
+
+```{r, echo=FALSE}
+
+plot <- ggplot(data_filtered, aes(x=Rating, y=Salary)) +
           geom_point() + 
           labs(
             x="Rating",
@@ -63,41 +66,51 @@ plot <- ggplot(filtered_data, aes(x=Rating, y=Salary)) +
             title="Correlation of Rating and Job Salary"
           ) + 
           theme_minimal()
+plot
+```
+
+> - Here we can clearly see a positive correlation between rating and salary. A rise in salary tends to correspond with a rise in rating from those taking the jobs.
+> - It is also worth noting that there are still jobs receiving 5-star ratings that have lower salaries, the trend is clearly there, but the correlation is not absolute.
+
+
+
+
+# Plot 2: 
+
+```{r,echo=FALSE}
+plot <- ggplot(data_filtered
+          , aes(x=`Job Roles`
+             , y=`Location`
+             , fill=Rating)) + 
+            geom_tile() + 
+            labs(
+              x = "Job Roles",
+              y = "Location",
+              fill = "Rating",
+              title = "Heatmap of Jobs By Location With Ratings"
+            ) + 
+            scale_fill_gradient(low="white", high="blue") + 
+            theme_minimal() + 
+            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 plot
 ```
 
+> - This plot allows us to find out where certain jobs are offered and how those jobs are rated by the employees. You can see where certain jobs are not offered as well as where the highest rated jobs can be found. If you want a great Mobile development experience, go to Bangalore, for example.
 
 
+# Plot 3:
 
+```{r,echo=FALSE}
 
-```{r}
-
-View(sampled_data)
-
-plot <- ggplot(sampled_data, aes(x=`Job Roles`
-                         , y=`Location`
-                         , fill=Rating
-                         , text = paste("Location: ", Location, "<br>Job Role: ", `Job Roles`, "<br>Rating: ", Rating))) +
-                          geom_tile() + 
-                          labs(
-                            x = "Job Roles",
-                            y = "Location",
-                            fill = "Rating",
-                            title = "Heatmap of Jobs By Location With Ratings"
-                          ) + 
-                          scale_fill_gradient(low="white", high="blue") + 
-                          theme_minimal()
-
+plot <- ggplot(data_filtered, aes(x=`Job Roles`, y=`Employment Status`, fill=Salary)) + 
+  geom_tile() + 
+  theme_minimal() + 
+  scale_fill_gradient(low="white", high="red") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 plot
 ```
 
-
-
-```{r}
-
-plot <- plot_ly(sampled_data, x = ~Rating, y = ~Salary, z = ~`Salaries Reported`, color=~Location, type = "scatter3d", mode = "markers")
-plot
-
-```
+> - Here we have a similar heat-map to the above plot, but we have Employment Status and Salary as our fill variable. This tells us where the highest paying jobs are by their Employment Status. 
+> - An experienced Java developer would likely look to full-time java positions to maximize his/her salary expectation.

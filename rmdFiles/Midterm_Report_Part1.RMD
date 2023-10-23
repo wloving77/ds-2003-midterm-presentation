@@ -14,10 +14,10 @@ output: html_document
 > 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
   
 # **Part 1: Data Science Positions:**
-> Here we will explore Data Scientist Jobs in an around the United States
+> - Here we will explore Data Scientist Jobs in an around the United States
+> - Our main goal will be to visualize information related to what jobs pay the most based on different factors, are there correlations or patterns? etc..
   
 # Load Data:
-
 
 ```{r, echo=FALSE, message=FALSE}
 
@@ -75,7 +75,7 @@ head(data_transformed)
 
 ```
 
-# **Create Plots to Tell Stories:**
+# **Create Plots:**
 
 ## Plot 1:
 > - With this plot we can clearly see that as your experience level rises, you can expect to see a corresponding increase in salary.

@@ -1,0 +1,101 @@
+---
+title: "Midterm Report Part 2"
+author: "wlf9zy, jes9hd"
+date: "2023-10-23"
+output: html_document
+---
+
+## **Contributors:**
+> William Loving (wfl9zy)
+> James Sweat (jes9hd)
+
+## **Goals:**
+> 1. Explore and visualize the broader Software Engineering field
+> 2. Create story-telling visualizations that provide sneak-peaks into the psyche of many comapnies as well as working individuals.
+> 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
+  
+# **Part 2: Software Engineering Positions:**
+> - Here our goal will be to create as many interesting plots as possible, this dataset is more feature rich so we should be able to find some interesting things.
+> - Note: This dataset was taken from job data in India, we hope the trends seen there will to some degree translate.
+
+```{r, message=FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+```
+
+# Load Data: 
+
+```{r}
+data <- read_csv("../data/india-data/Salary_Dataset_with_Extra_Features.csv")
+
+head(data)
+
+```
+
+# Make Some Transformations for Ease of Understanding:
+
+```{r}
+
+#Remove the one outlier
+threshold <- 9000000
+
+filtered_data <- data%>%
+  filter(Salary < threshold)
+
+filtered_data$Location <- as.factor(filtered_data$Location)
+
+sampled_data  <- filtered_data[sample(nrow(data), 1000), ]
+
+
+```
+
+# Create Visualizations: 
+
+```{r}
+
+plot <- ggplot(filtered_data, aes(x=Rating, y=Salary)) +
+          geom_point() + 
+          labs(
+            x="Rating",
+            y="Salary",
+            title="Correlation of Rating and Job Salary"
+          ) + 
+          theme_minimal()
+
+plot
+```
+
+
+
+
+
+```{r}
+
+plot <- ggplot(sampled_data, aes(x=`Job Roles`
+                         , y=`Location`
+                         , fill=Rating
+                         , text = paste("Location: ", Location, "<br>Job Role: ", `Job Roles`, "<br>Rating: ", Rating))) +
+                          geom_tile() + 
+                          labs(
+                            x = "Job Roles",
+                            y = "Location",
+                            fill = "Rating",
+                            title = "Heatmap of Jobs By Location With Ratings"
+                          ) + 
+                          scale_fill_gradient(low="white", high="blue") + 
+                          theme_minimal()
+
+
+plot
+```
+
+
+
+```{r}
+
+plot <- plot_ly(sampled_data, x = ~Rating, y = ~Salary, z = ~`Salaries Reported`, color=~Location, type = "scatter3d", mode = "markers")
+plot
+
+```

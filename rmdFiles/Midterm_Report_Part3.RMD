@@ -17,7 +17,7 @@ output: html_document
 > - Find out if the marital status of individuals when working has a general trend, are more people married? Divorced? Single?
 
 # **Part 3: Job Satisfaction Outside of CS/DS:**
-> - This data more-so concerns people and how they felt about their jobs rather than data about the global job itself.
+> - This data more-so concerns people and how they felt about their jobs rather than data about the job itself.
 
 
 ```{r, message=FALSE}
@@ -27,7 +27,7 @@ library(ggplot2)
 library(plotly)
 ```
 
-# Load Data: 
+# **Load Data:**
 
 ```{r, message=FALSE}
 data <- read_csv("../data/job-satisfaction-data/hr_data.csv.csv")
@@ -38,7 +38,7 @@ head(data)
 ```
 
 
-# Make Small Transformation:
+# **Make Some Transformations for Ease of Understanding:**
 
 ```{r}
 
@@ -48,7 +48,7 @@ data$JobSatisfaction <- as.factor(data$JobSatisfaction)
 
 
 
-# **Visuals:**
+# **Create Visuals:**
 
 # Plot 1: 
 

@@ -11,8 +11,9 @@ output: html_document
 
 ## **Goals:**
 > - Find out if higher salary jobs tend to be rated more highly than lower salary. 
-> - Find out where jobs are offered and see if some jobs are location specific.
-> - 
+> - Find out where Jobs are offered and see if some jobs are location specific.
+> - Find out which Job roles have the highest ratings and what kinds of jobs they are.
+> - Find out which Job roles have the highest salaries and what kinds of jobs they are. 
   
 # **Part 2: Software Engineering Positions in India:**
 > - The data is vast so visualizations must be poignant and intentional with the correlations we hope to explore. 
@@ -103,9 +104,12 @@ plot
 
 ```{r,echo=FALSE}
 
-plot <- ggplot(data_filtered, aes(x=`Job Roles`, y=`Employment Status`, fill=Salary)) + 
+plot <- ggplot(data_filtered, aes(x=`Job Roles`, y=`Employment Status`, fill=Rating)) + 
   geom_tile() + 
-  theme_minimal() + 
+  labs(
+    title = "What Job Roles have the highest Ratings per Employment Group?"
+  ) + 
+  theme_dark() + 
   scale_fill_gradient(low="white", high="red") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
@@ -114,3 +118,22 @@ plot
 
 > - Here we have a similar heat-map to the above plot, but we have Employment Status and Salary as our fill variable. This tells us where the highest paying jobs are by their Employment Status. 
 > - An experienced Java developer would likely look to full-time java positions to maximize his/her salary expectation.
+
+
+# Plot 4: 
+
+```{r, echo=FALSE}
+plot <- ggplot(data_filtered, aes(x=`Job Roles`, y=`Employment Status`, fill=Salary)) + 
+  geom_tile() + 
+  labs(
+    title = "What Job Roles have the highest Salaries per Employment Group?"
+  ) +
+  theme_dark() + 
+  scale_fill_gradient(low="white", high="red") + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+plot
+```
+
+> - This plot is virtually identical to the above, but now we are filling by the salary instead of the rating to allow for more granular decision making, do you want more pay or higher rating? 
+

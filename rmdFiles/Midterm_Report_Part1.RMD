@@ -9,7 +9,7 @@ output: html_document
 > James Sweat (jes9hd)
 
 ## **Goals:**
-> 1. Explore and visualize the broader Computer Science / Data Analysis industry fields. 
+> 1. Explore and visualize the broader Computer Science / Data Science industry fields. 
 > 2. Discover interesting correlations between attributes of available jobs using multiple different Datasets.
 > 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
   
@@ -17,15 +17,13 @@ output: html_document
 > - Here we will explore Data Scientist Jobs in an around the United States
 > - Our main goal will be to visualize information related to what jobs pay the most based on different factors, are there correlations or patterns? etc..
   
-# Load Data:
+# **Load Data:**
 
 ```{r, echo=FALSE, message=FALSE}
-
 library(readr)
 library(dplyr)
 library(ggplot2)
 library(plotly)
-
 ```
 
 ```{r}
@@ -34,18 +32,17 @@ data <- read_csv("../data/data-science-jobs/ds_salaries.csv")
 head(data)
 ```
 
-# Explore Data and Make Necessary Transformations:
+# **Explore Data and Make Necessary Transformations:**
 
-```{r, echo=FALSE}
+```{r,echo=FALSE,message=FALSE}
 str(data)
 ```
 
-```{r, echo=FALSE}
+```{r,echo=FALSE,message=FALSE}
 summary(data)
 ```
 
-
-## Mutate Categorical Variables to be More Descriptive: 
+# **Make Some Transformations for Ease of Understanding:**
 
 ```{r, echo=TRUE}
 data_transformed <- data%>%
@@ -78,17 +75,15 @@ head(data_transformed)
 # **Create Plots:**
 
 ## Plot 1:
-> - With this plot we can clearly see that as your experience level rises, you can expect to see a corresponding increase in salary.
-> - It is also worth noting that different types of work see different effects, for example, contract work is much more volatile than Full Time salaries.
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 plot <- ggplot(data_transformed, aes(x=experience_level, y=salary_in_usd, fill=employment_type)) +
   geom_bar(stat='identity', position='dodge') + 
   labs(
     x="Experience Level",
     y="Salary in $USD",
     fill="Employment Type",
-    title="The effects of Experience Level on Salary"
+    title="The effects of Experience Level and Employment Type on Salary"
   ) + 
   scale_x_discrete(limits = c("Entry-Level", "Senior-Level", "Manager-Level","Executive-Level")) +
   theme_minimal()
@@ -96,11 +91,13 @@ plot <- ggplot(data_transformed, aes(x=experience_level, y=salary_in_usd, fill=e
 ggplotly(plot)
 ```
 
-## Plot 2:
-> - Note that In-Person only paid the highest for Medium Sized Companies, Remote actually had the highest payout for Large 
-> - Small companies pay grows step-wise with respect to the remote ratio (Hybrid->In-Person->Remote)
+> - With this plot we can clearly see that as your experience level rises, you can expect to see a corresponding increase in salary.
+> - It is also worth noting that different types of work see different effects, for example, contract work is much more volatile than Full Time salaries.
 
-```{r}
+
+## Plot 2:
+
+```{r, echo=FALSE}
 plot <- ggplot(data_transformed, aes(x=company_size, y=salary_in_usd, fill=remote_ratio)) +
           geom_bar(stat='identity', position='dodge') +
           labs(
@@ -114,13 +111,16 @@ plot <- ggplot(data_transformed, aes(x=company_size, y=salary_in_usd, fill=remot
 
 ggplotly(plot)
 
-
 ```
 
-## Plot 3:
-> - A lot of information, but the most interesting is that the US has the highest paying jobs by far with Small companies in Japan as a close second.
+> - Note that In-Person only paid the highest for Medium Sized Companies, Remote actually had the highest payout for Large 
+> - Small companies pay grows step-wise with respect to the remote ratio (Hybrid->In-Person->Remote)
 
-```{r}
+
+
+## Plot 3:
+
+```{r, echo=FALSE}
 
 plot <- ggplot(data_transformed, aes(x=company_location, y=salary_in_usd, fill=company_size)) +
           geom_bar(stat='identity', position='dodge') +
@@ -133,15 +133,13 @@ plot <- ggplot(data_transformed, aes(x=company_location, y=salary_in_usd, fill=c
           theme_minimal() +
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-
-
-  
-  
 ggplotly(plot)
 ```
+> - A lot of information, but the most interesting is that the US has the highest paying jobs by far with Small companies in Japan as a close second.
+
 
 
 # Part 1 Closing Remarks: 
 
-> - This has been a look into the data science job market examining salary as it relates to company size, the companies remote ratios, and the actual experience levels required for the positions. We will now be moving into more general Software Engineering Visuals for Part 2.
+> - This has been a look into the data science job market examining salary as it relates to company size, the companies remote ratios, and the actual experience levels required for the positions. We will now be moving into more India based Software Engineering Visuals for Part 2.
 

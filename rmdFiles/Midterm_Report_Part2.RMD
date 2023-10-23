@@ -14,7 +14,7 @@ output: html_document
 > 2. Create story-telling visualizations that provide sneak-peaks into the psyche of many comapnies as well as working individuals.
 > 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
   
-# **Part 2: Software Engineering Positions:**
+# **Part 2: Software Engineering Positions in India:**
 > - Here our goal will be to create as many interesting plots as possible, this dataset is more feature rich so we should be able to find some interesting things.
 > - Note: This dataset was taken from job data in India, we hope the trends seen there will to some degree translate.
 
@@ -72,6 +72,8 @@ plot
 
 
 ```{r}
+
+View(sampled_data)
 
 plot <- ggplot(sampled_data, aes(x=`Job Roles`
                          , y=`Location`

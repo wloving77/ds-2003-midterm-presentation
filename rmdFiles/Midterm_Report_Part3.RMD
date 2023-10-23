@@ -1,0 +1,67 @@
+---
+title: "Midterm Report Part 3"
+author: "wlf9zy, jes9hd"
+date: "2023-10-23"
+output: html_document
+---
+---
+title: "Midterm Report Part 2"
+author: "wlf9zy, jes9hd"
+date: "2023-10-23"
+output: html_document
+---
+
+## **Contributors:**
+> William Loving (wfl9zy)
+> James Sweat (jes9hd)
+
+## **Goals:**
+> 1. Explore and visualize the broader Software Engineering field
+> 2. Create story-telling visualizations that provide sneak-peaks into the psyche of many comapnies as well as working individuals.
+> 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
+  
+# **Part 2: Software Engineering Positions:**
+> - Here our goal will be to create as many interesting plots as possible, this dataset is more feature rich so we should be able to find some interesting things.
+
+
+```{r, message=FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+```
+
+# Load Data: 
+
+```{r}
+data <- read_csv("../data/data-analyst-data/DataAnalyst.csv")
+
+
+head(data)
+```
+
+
+# Make Small Transformation Using Function
+```{r}
+
+# extracts the higher salary value from string like "$47K-$76K (Glassdoor est.)"
+extract_higher_salary <- function(salary_string) {
+  matches <- regmatches(salary_string, regexpr("\\$(\\d+)K-\\$(\\d+)K", salary_string))
+  if (length(matches) > 0) {
+    salary_values <- as.integer(unlist(matches))
+    if (length(salary_values) == 2){
+      return(salary_values)
+    }
+  } 
+    return(NA)
+  }
+
+
+data <- data %>%
+  mutate(Lower_Salary_K = sapply(`Salary Estimate`, function(x) extract_higher_salary(x)[1]),
+         Higher_Salary_K = sapply(`Salary Estimate`, function(x) extract_higher_salary(x)[2]))
+
+
+View(data)
+
+```

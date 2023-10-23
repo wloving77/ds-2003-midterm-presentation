@@ -1,13 +1,7 @@
 ---
 title: "Midterm Report Part 3"
 author: "wlf9zy, jes9hd"
-date: "2023-10-23"
-output: html_document
----
----
-title: "Midterm Report Part 2"
-author: "wlf9zy, jes9hd"
-date: "2023-10-23"
+date: "2023-10-21"
 output: html_document
 ---
 
@@ -16,12 +10,10 @@ output: html_document
 > James Sweat (jes9hd)
 
 ## **Goals:**
-> 1. Explore and visualize the broader Software Engineering field
-> 2. Create story-telling visualizations that provide sneak-peaks into the psyche of many comapnies as well as working individuals.
-> 3. Learn how to develop meaningful visualizations to communicate the data we have to an uninformed audience.
-  
-# **Part 2: Software Engineering Positions:**
-> - Here our goal will be to create as many interesting plots as possible, this dataset is more feature rich so we should be able to find some interesting things.
+> - Our goal here in part 3 is to explore jobs and job satisfaction on a more granular level, we want to see if people enjoy their jobs or if they are "forced" to among many other interesting correlations. 
+
+# **Part 3: Job Satisfaction Outside of CS/DS:**
+> - This data more-so concerns people and how they felt about their jobs rather than data about the global job itself.
 
 
 ```{r, message=FALSE}
@@ -33,35 +25,118 @@ library(plotly)
 
 # Load Data: 
 
-```{r}
-data <- read_csv("../data/data-analyst-data/DataAnalyst.csv")
+```{r, message=FALSE}
+data <- read_csv("../data/job-satisfaction-data/hr_data.csv.csv")
+```
 
+```{r}
 
 head(data)
 ```
 
 
-# Make Small Transformation Using Function
+# Make Small Transformation:
+
 ```{r}
 
-# extracts the higher salary value from string like "$47K-$76K (Glassdoor est.)"
-extract_higher_salary <- function(salary_string) {
-  matches <- regmatches(salary_string, regexpr("\\$(\\d+)K-\\$(\\d+)K", salary_string))
-  if (length(matches) > 0) {
-    salary_values <- as.integer(unlist(matches))
-    if (length(salary_values) == 2){
-      return(salary_values)
-    }
-  } 
-    return(NA)
-  }
-
-
-data <- data %>%
-  mutate(Lower_Salary_K = sapply(`Salary Estimate`, function(x) extract_higher_salary(x)[1]),
-         Higher_Salary_K = sapply(`Salary Estimate`, function(x) extract_higher_salary(x)[2]))
-
-
-View(data)
+data$JobSatisfaction <- as.factor(data$JobSatisfaction)
 
 ```
+
+
+
+# **Create Visuals:**
+
+# Plot 1: 
+
+```{r, echo=FALSE}
+
+plot <- ggplot(data, aes(x=BusinessTravel, y=Age, fill=OverTime)) + 
+  geom_bar(stat='identity', position="dodge") + 
+  labs(
+    x="Travel Type",
+    y="Age",
+    title = "Travel type as it relates to Age and Over Time",
+    fill="Over Time"
+ ) + 
+  theme_minimal()
+
+
+ggplotly(plot)
+```
+
+> - Despite the plot seeming starved of information, we can actually gleam some things. It seems that travel-type, age, and over-time are well distributed. There are no real patterns indicating that older people might travel less or anything like that.
+
+
+# Plot 2:
+
+
+```{r, echo=FALSE}
+
+plot <- ggplot(data, aes(x=JobSatisfaction, y=DistanceFromHome, fill=JobRole)) + 
+  geom_bar(stat='identity', position='dodge') + 
+  labs(
+    x="Job Satisfaction",
+    y="Distance From Home",
+    fill="Job Role",
+    title="Job Satisfaction as it relates to Distance From Home and the Job Role"
+  ) + 
+  theme_minimal()
+
+
+
+ggplotly(plot)
+```
+
+> - Here we once again see a lack of correlation, that job satisfaction and the distance from home / job role actually tend to be unrelated to one another. We would expect potentially high distances from home to result in lower job satisfaction, but that trend is not present in the data.
+
+
+# Plot 3: 
+
+
+```{r, echo=FALSE}
+
+plot <- ggplot(data, aes(x=YearsSinceLastPromotion, y=MonthlyRate, fill=JobSatisfaction)) + 
+  geom_bar(stat='identity', position="dodge") + 
+  #geom_point() +
+  labs(
+    x="Years Since Promotion",
+    y="Monthly Rate",
+    fill = "Job Satisfaction",
+    title="Years Since Promotion as it Relates to Monthly Rate and Job Satisfaction"
+  ) + 
+  theme_minimal()
+
+
+ggplotly(plot)
+```
+
+> - Here we can discern that as the years since promotion go on, the job satisfaction definitely wavers, especially if the monthly rate is low and the years since promotion is high.
+
+
+
+# Plot 4:
+
+
+```{r, echo=FALSE}
+
+plot <- ggplot(data, aes(x=MaritalStatus, y=MonthlyIncome, fill=Gender)) + 
+  geom_bar(stat='identity') + 
+  labs(
+    x="Marital Status",
+    y="Monthly Income",
+    title = "Do People Tend to be Married when Working?",
+    fill="Gender"
+ ) + 
+  theme_minimal()
+
+
+ggplotly(plot)
+
+
+```
+
+
+> - Here we are simply showing that most working class people tend to be married regardless of their gender, we have significantly more monthly rate data-points for married individuals than Divorced or Single.
+
+

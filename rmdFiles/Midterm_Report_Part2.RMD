@@ -1,7 +1,5 @@
 ---
 title: "Midterm Report Part 2"
-author: "wlf9zy, jes9hd"
-date: "2023-10-23"
 output: html_document
 ---
 

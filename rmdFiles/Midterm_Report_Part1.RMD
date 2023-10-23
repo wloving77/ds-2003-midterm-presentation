@@ -1,7 +1,5 @@
 ---
 title: "Midterm Report Part-1"
-author: "wlf9zy, jes9hd"
-date: "2023-10-22"
 output: html_document
 ---
 ## **Contributors:**
@@ -26,19 +24,21 @@ library(ggplot2)
 library(plotly)
 ```
 
-```{r}
+```{r, message=FALSE}
 data <- read_csv("../data/data-science-jobs/ds_salaries.csv")
+```
 
+```{r}
 head(data)
 ```
 
 # **Explore Data and Make Necessary Transformations:**
 
-```{r,echo=FALSE,message=FALSE}
+```{r}
 str(data)
 ```
 
-```{r,echo=FALSE,message=FALSE}
+```{r}
 summary(data)
 ```
 

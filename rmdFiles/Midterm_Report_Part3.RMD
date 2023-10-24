@@ -52,45 +52,44 @@ data$JobSatisfaction <- as.factor(data$JobSatisfaction)
 
 ```{r, echo=FALSE}
 
-plot <- ggplot(data, aes(x=BusinessTravel, y=Age, fill=OverTime)) + 
-  geom_bar(stat='identity', position="dodge") + 
-  labs(
+plot <- ggplot(data, aes(x=BusinessTravel, y=JobRole, fill=MonthlyRate)) + 
+    geom_tile() +
+    labs(
     x="Travel Type",
-    y="Age",
-    title = "Travel type as it relates to Age and Over Time",
-    fill="Over Time"
+    y="Job Role",
+    title = "Travel type as it relates to Job Role and Monthly Salary",
+    fill="Monthly Rate"
  ) + 
-  theme_minimal()
+  theme_minimal() + 
+  scale_fill_gradient(low="white", high="green")
 
 
-ggplotly(plot)
+
+plot
 ```
 
-> - Despite the plot seeming starved of information, we can actually gleam some things. It seems that travel-type, age, and over-time are well distributed. There are no real patterns indicating that older people might travel less or anything like that.
+> - This visual allows us to discern some interesting things. For example, Managers that travel frequently tend to be paid less, the reverse is true for Manufacturing Directors that don't travel. 
 
 
 # Plot 2:
 
 
 ```{r, echo=FALSE}
-
-plot <- ggplot(data, aes(x=JobSatisfaction, y=DistanceFromHome, fill=JobRole)) + 
-  geom_bar(stat='identity', position='dodge') + 
+plot <- ggplot(data, aes(x=JobSatisfaction, y=JobRole, fill=Age)) + 
+  geom_tile() + 
   labs(
     x="Job Satisfaction",
-    y="Distance From Home",
-    fill="Job Role",
-    title="Job Satisfaction as it relates to Distance From Home and the Job Role"
-  ) + 
+    y="Job Role",
+    fill="Age",
+    title="Job Satisfaction as it relates to Job Role and Age"
+  ) +
+  scale_fill_gradient(low="white", high="red") +
   theme_minimal()
 
-
-
-ggplotly(plot)
+plot
 ```
 
-> - Here we once again see a lack of correlation, that job satisfaction and the distance from home / job role actually tend to be unrelated to one another. We would expect potentially high distances from home to result in lower job satisfaction, but that trend is not present in the data.
-
+> - Here we can gleam some small correlations, perhaps young people simply aren't made for management, manufacturing, or researching positions.
 
 # Plot 3: 
 
@@ -139,5 +138,27 @@ ggplotly(plot)
 
 
 > - Here we are simply showing that most working class people tend to be married regardless of their gender, we have significantly more monthly rate data-points for married individuals than Divorced or Single.
+
+
+
+# Plot 5:
+
+
+```{r, echo=FALSE}
+
+plot <- ggplot(data, aes(x=JobSatisfaction, y=JobRole, fill=MonthlyIncome)) + 
+    geom_tile() +
+    labs(
+    x="Job Satisfaction",
+    y="Job Role",
+    title = "What Jobs Pay the Most?",
+    fill="Monthly Income"
+ ) + 
+  theme_minimal() + 
+  scale_fill_gradient(low="white", high="blue")
+
+
+plot
+```
 
 
